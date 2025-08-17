@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+.hero { 
+    text-align: center; 
+    padding: 30px 20px; 
+    background-color: #f9f9f9; 
+}
+.hero h1 { 
+    font-size: 30px; 
+    color: #333; 
+    margin-bottom: 10px; 
+}
+.hero p { 
+    font-size: 16px; 
+    color: #666; 
+    margin-bottom: 20px; 
+}
+.content { 
+    max-width: 900px; 
+    margin: 40px auto; 
+    padding: 0 20px; 
+}
+.content h3 { 
+    font-size: 22px; 
+    color: #333; 
+    margin-bottom: 10px; 
+}
+.content p { 
+    font-size: 16px; 
+    color: #555; 
+    line-height: 1.6; 
+    margin-bottom: 20px; 
+}
+.features {
+    margin-bottom: 65px;
+}
+.features ul { 
+    padding-left: 20px; 
+}
+.features li { 
+    font-size: 16px; 
+    margin-bottom: 10px; 
+    color: #555; 
+}
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>About ExploreIndia</h1>
+    <p>Making travel easier, faster, and more enjoyable for everyone.</p>
+</section>
+
+<!-- Content Section -->
+<div class="content">
+    <h3>Who We Are</h3>
+    <p>ExploreIndia simplifies travel planning by offering everything you need in one place. Our platform allows users to search, compare, and book trips easily and efficiently.</p>
+    
+    <h3>Why Choose Us?</h3>
+    <p>Our mission is to eliminate the hassle of trip planning. Whether you're a traveler or service provider, ExploreIndia ensures a seamless experience, bringing together services and tools that save time and effort.</p>
+
+    <div class="features">
+        <h3>Key Features</h3>
+        <ul>
+            <li><strong>Search & Filter Trips:</strong> Explore options by season, destination, and budget.</li>
+            <li><strong>Easy Bookings:</strong> Book and pay for trips directly through our platform.</li>
+            <li><strong>User Reviews:</strong> Gain insights from other travelers' experiences.</li>
+            <li><strong>Service Management:</strong> Service providers can manage trip details and bookings.</li>
+            <li><strong>Admin Tools:</strong> Administrators can manage users and platform settings with ease.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

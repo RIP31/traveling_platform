@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  .form-container h2 {
+    text-align: center;
+    color: #0b3d91;
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .form-group textarea {
+    resize: vertical;
+    height: 120px;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: #0b3d91;
+    box-shadow: 0 0 8px rgba(11, 61, 145, 0.2);
+    outline: none;
+  }
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #0b3d91;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .submit-btn:hover {
+    background-color: #083b73;
+    transform: translateY(-2px);
+  }
+  .errorlist {
+    color: red;
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+
+  /* Image preview section */
+  .image-preview {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .image-preview img {
+    max-width: 60%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .new-image-input {
+    margin-top: 10px;
+  }
+  .new-image-input label,
+  .new-image-input input[type="checkbox"] {
+    display: none;
+    margin-bottom: 10px;
+  }
+
+  #id_image {
+    margin-top: 6px;
+  }
+</style>
+
+<div class="form-container">
+  <h2>Edit Trip: {{ trip.title }}</h2>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <!-- General Information -->
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {{ form.title.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {{ form.description.errors }}
+    </div>
+    <!-- Travel Details -->
+    <div class="form-group">
+      {{ form.from_city.label_tag }}
+      {{ form.from_city }}
+      {{ form.from_city.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.to_city.label_tag }}
+      {{ form.to_city }}
+      {{ form.to_city.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.duration.label_tag }}
+      {{ form.duration }}
+      {{ form.duration.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.season.label_tag }}
+      {{ form.season }}
+      {{ form.season.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.destination_type.label_tag }}
+      {{ form.destination_type }}
+      {{ form.destination_type.errors }}
+    </div>
+    <!-- Pricing -->
+    <div class="form-group">
+      {{ form.price.label_tag }}
+      {{ form.price }}
+      {{ form.price.errors }}
+    </div>
+    <!-- Availability -->
+    <div class="checkbox-group">
+      {{ form.is_available }}
+      <label for="{{ form.is_available.id_for_label }}">{{ form.is_available.label }}</label>
+      {{ form.is_available.errors }}
+    </div>
+    <!-- Image Section -->
+    <div class="form-group">
+      <label>Current Image:</label>
+      <div class="image-preview">
+        {% if trip.image %}
+          <img src="{{ trip.image.url }}" alt="{{ trip.title }}">
+        {% else %}
+          <p>No image available.</p>
+        {% endif %}
+      </div>
+      <div class="new-image-input">
+        {{ form.image.label_tag }}
+        {{ form.image }}
+        {{ form.image.errors }}
+      </div>
+    </div>
+    <!-- Submit Button -->
+    <button type="submit" class="submit-btn">Update Trip</button>
+  </form>
+</div>
+{% endblock %}
+  

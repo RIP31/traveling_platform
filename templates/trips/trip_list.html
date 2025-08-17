@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Available Trips</h1>
+  <ul>
+    {% for trip in trips %}
+      <li>
+        <a href="{% url 'trip_detail' trip.pk %}">{{ trip.title }}</a>
+        &mdash; from {{ trip.from_city }} to {{ trip.to_city }}
+      </li>
+    {% empty %}
+      <li>No trips available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

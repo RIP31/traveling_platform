@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  :root {
+    --primary-color: #0b3d91;
+    --secondary-color: #666;
+    --card-bg: #fff;
+    --border-radius: 6px;
+  }
+  .dashboard-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .dashboard-container h2 {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .booking-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    background-color: var(--card-bg);
+    transition: transform 0.2s ease;
+  }
+  .booking-card:hover {
+    transform: translateY(-3px);
+  }
+  .booking-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+  /* Container for details and price */
+  .booking-info {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .booking-details {
+    /* Flex column for details */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .booking-details h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--primary-color);
+  }
+  .booking-details p {
+    margin: 2px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  .price-box {
+    min-width: 100px;
+    text-align: right;
+  }
+  .price-box .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  .explore-btn {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    max-width: 150px;
+  }
+</style>
+
+<div class="dashboard-container">
+  <h2>{% if user.role == 'admin' %}All Bookings{% else %}Your Bookings{% endif %}</h2>
+  {% if bookings %}
+    {% for booking in bookings %}
+      <a href="{% url 'booking_detail' booking.pk %}" style="text-decoration: none; color: inherit;">
+        <div class="booking-card">
+          <img src="{% if booking.trip.image %}{{ booking.trip.image.url }}{% else %}https://via.placeholder.com/100x100?text=No+Image{% endif %}" alt="{{ booking.trip.title }}">
+          <div class="booking-info">
+            <div class="booking-details">
+              <h3>{{ booking.trip.title }}</h3>
+              <p>From {{ booking.trip.from_city }} to {{ booking.trip.to_city }}</p>
+              <p>Booked on: {{ booking.booking_date|date:"M d, Y" }}</p>
+              <p>Persons: {{ booking.number_of_persons }}</p>
+              {% if user.role == 'admin' %}
+              <p>Booked by: {{ booking.traveler.full_name }} ({{ booking.traveler.email }})</p>
+              {% endif %}
+            </div>
+            <div class="price-box">
+              <p class="price">₹{{ booking.total_price|floatformat:2 }}</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <p style="text-align: center; color: #666; font-size: 16px;">You have no bookings yet.</p>
+  {% endif %}
+  <a href="{% url 'home' %}" class="explore-btn">Explore Trips</a>
+</div>
+{% endblock %}
+  

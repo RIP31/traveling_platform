@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ExploreIndia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #0b3d91;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo a {
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+
+    header nav {
+      display: flex;
+      gap: 27px;
+      align-items: center;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s ease-in-out;
+    }
+
+    header nav a:hover {
+      color: gainsboro;
+    }
+
+    header nav .login {
+      display: inline-block;
+      background-color: white;
+      color: #0b3d91;
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+
+    header nav .login:hover {
+      color: #333;
+      background-color: #f0f0f0;
+    }
+
+    /* Profile Menu */
+    .profile-menu {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      background-color: #f0f0f0;
+      /* Light gray */
+      border-radius: 50%;
+      color: #333;
+      /* Dark text */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      font-family: 'Roboto', sans-serif;
+      /* Roboto font */
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      color: #333333;
+      min-width: 120px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+      margin-top: 5px;
+      right: 0;
+      z-index: 1000;
+      transition: opacity 0.2s ease-in-out;
+      opacity: 0;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333333;
+      font-size: 14px;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f4f4f4;
+      color: #333333;
+    }
+
+    .profile-menu.open .dropdown-content {
+      display: block;
+      opacity: 1;
+    }
+
+    main {
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">ExploreIndia</a>
+    </div>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact' %}">Contact</a>
+
+      {% if request.user.is_authenticated %}
+      <!-- Profile Menu -->
+      <div class="profile-menu" id="profileMenu">
+        <!-- Avatar Circle with First Letter of Full Name -->
+        <div class="avatar">
+          {{ request.user.full_name|slice:":1"|upper }}
+        </div>
+        <!-- Dropdown Links -->
+        <div class="dropdown-content">
+          {% if request.user.role == 'provider' %}
+            <a href="{% url 'provider_dashboard' %}">Dashboard</a>
+          {% else %}
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+          {% endif %}
+          
+          <!-- Logout -->
+          <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">Logout</a>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="login">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Profile Menu Toggle -->
+  <script>
+    const profileMenu = document.getElementById('profileMenu');
+    if (profileMenu) {
+      profileMenu.addEventListener('click', function (event) {
+        event.stopPropagation(); // Prevent immediate closure
+        this.classList.toggle('open');
+      });
+      document.addEventListener('click', function (event) {
+        if (!profileMenu.contains(event.target)) {
+          profileMenu.classList.remove('open');
+        }
+      });
+    }
+  </script>
+
+  <!-- Refresh the page when page is accessed via back button -->
+  <script>
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
+</body>
+
+</html>

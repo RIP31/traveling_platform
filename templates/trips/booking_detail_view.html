@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .content-section {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .section-title {
+    font-size: 24px;
+    color: #0b3d91;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  /* Trip Details Styling */
+  .trip-details h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .trip-details p {
+    font-size: 16px;
+    color: #666;
+    margin: 10px 0;
+  }
+  .trip-details .price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0b3d91;
+  }
+  /* Booking Details Form Styling */
+  .booking-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .booking-form.admin-view {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .booking-form div {
+    display: flex;
+    flex-direction: column;
+  }
+  .booking-form label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .booking-form input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+  }
+  .booking-form input:focus {
+    border-color: #0b3d91;
+    outline: none;
+  }
+  .button-container {
+    grid-column: span 2;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .button-container button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+  }
+  .button-container button:hover {
+    background-color: #c9302c;
+  }
+  .errorlist {
+    color: red;
+    margin-top: 5px;
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+</style>
+
+<!-- Trip Details Section -->
+<section class="content-section trip-details">
+  <h2 class="section-title">Trip Details</h2>
+  <h1>{{ booking.trip.title }}</h1>
+  <p>{{ booking.trip.description }}</p>
+  <p><strong>From:</strong> {{ booking.trip.from_city }} | <strong>To:</strong> {{ booking.trip.to_city }}</p>
+  <p><strong>Duration:</strong> {{ booking.trip.duration|default:"3 Days, 2 Nights" }}</p>
+  <p><strong>Service Provider:</strong> {{ booking.trip.provider.full_name }} | <strong>Contact:</strong> {{ booking.trip.provider.phone }}</p>
+  <p><strong>Price:</strong> ₹{{ booking.trip.price|floatformat:0 }} per person</p>
+  <p><strong>Total Price:</strong> <p class="price" >₹{{ total_price|floatformat:2 }}</p></p>
+  
+</section>
+
+<!-- Booking Details Section -->
+<section class="content-section booking-details">
+  <h2 class="section-title">{% if user.role == 'admin' %}Booking Details{% else %}Your Booking Details{% endif %}</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="booking-form{% if user.role == 'admin' %} admin-view{% endif %}">
+      <div>
+        <label>Full Name</label>
+        <input type="text" value="{{ booking.traveler.full_name }}" disabled>
+      </div>
+      <div>
+        <label>Email Address</label>
+        <input type="email" value="{{ booking.traveler.email }}" disabled>
+      </div>
+      <div>
+        <label>Phone Number</label>
+        <input type="text" value="{{ booking.traveler.phone }}" disabled>
+      </div>
+      <div>
+        <label>Number of Persons</label>
+        <input type="number" value="{{ booking.number_of_persons }}" disabled>
+      </div>
+      <div>
+        <label>Departure Date</label>
+        <input type="date" value="{{ booking.departure_date|date:'Y-m-d' }}" disabled>
+      </div>
+      {% if user.role == 'admin' %}
+      <div>
+        <label>Booked By</label>
+        <input type="text" value="{{ booking.traveler.full_name }} ({{ booking.traveler.email }})" disabled>
+      </div>
+      {% endif %}
+    </div>
+    <div class="button-container">
+      {% if user.role == 'admin' or booking.traveler == user %}
+        <button type="submit">Cancel Booking</button>
+      {% endif %}
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  :root {
+    --primary-color: #0b3d91;
+    --secondary-color: #666;
+    --input-bg: #fff;
+    --input-border: #ddd;
+    --input-focus: var(--primary-color);
+    --input-padding: 12px;
+    --input-radius: 6px;
+    --transition-duration: 0.3s;
+  }
+
+  /* Container for the form */
+  .search-bar form {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .form-row input,
+  .form-row select {
+    flex: 1;
+    min-width: 180px;
+    padding: var(--input-padding);
+    font-size: 14px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--input-radius);
+    background-color: var(--input-bg);
+    transition: border-color var(--transition-duration);
+  }
+
+  .form-row input:focus,
+  .form-row select:focus {
+    outline: none;
+    border-color: var(--input-focus);
+  }
+
+  button[type="submit"] {
+    padding: var(--input-padding);
+    font-size: 14px;
+    border: none;
+    border-radius: var(--input-radius);
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color var(--transition-duration), transform 0.2s ease;
+    width: 150px;
+    margin: 0 auto;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #083b73;
+    transform: translateY(-2px);
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="hero" style="text-align: center; padding: 30px 20px; background-color: #f9f9f9;">
+  <h1 style="font-size: 30px; margin-bottom: 10px; color: #333;">
+    Discover Incredible India
+  </h1>
+  <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+    Where Every Journey Tells a Story of Adventure, Culture, and Timeless Beauty
+  </p>
+  <div class="search-bar">
+    <form method="GET" action="{% url 'search_trips' %}">
+      <div class="form-row">
+        <input type="text" name="from_city" placeholder="From">
+        <input type="text" name="to_city" placeholder="To">
+      </div>
+      <div class="form-row">
+        <select name="season">
+          <option value="">Select Season</option>
+          <option value="summer">Summer</option>
+          <option value="winter">Winter</option>
+          <option value="monsoon">Monsoon</option>
+        </select>
+        <select name="destination_type">
+          <option value="">Destination Type</option>
+          <option value="mountains">Mountains</option>
+          <option value="beaches">Beaches</option>
+          <option value="deserts">Deserts</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input type="number" name="min_price" placeholder="Min Price">
+        <input type="number" name="max_price" placeholder="Max Price">
+      </div>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .content-section {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  /* Trip details styling */
+  .trip-details h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .trip-details p {
+    font-size: 16px;
+    color: #666;
+    margin: 10px 0;
+  }
+  .trip-details .price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0b3d91;
+    margin: 10px 0;
+  }
+  /* Booking form styling */
+  .booking-section {
+    margin-top: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .booking-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  .booking-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .booking-form div {
+    display: flex;
+    flex-direction: column;
+  }
+  .booking-form label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .booking-form input {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .booking-form input:focus {
+    border-color: #0b3d91;
+    outline: none;
+  }
+
+  .button-container {
+    grid-column: span 2;
+  }
+  .button-container button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #0b3d91;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.3s ease-in-out;
+  }
+  .button-container button:hover {
+  background-color: #083b73;
+  transform: translateY(-2px);
+}
+
+  .errorlist {
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 0%;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+</style>
+
+<!-- Trip Details Section -->
+<section class="content-section trip-details">
+  <h1>{{ trip.title }}</h1>
+  <p>{{ trip.description }}</p>
+  <p><strong>From:</strong> {{ trip.from_city }} | <strong>To:</strong> {{ trip.to_city }}</p>
+  <p><strong>Duration:</strong> {{ trip.duration }}</p>
+  <p><strong>Service Provider:</strong> {{ trip.provider.full_name }} | <strong>Contact Number:</strong> {{ trip.provider.phone }}</p>
+  <p class="price">₹{{ trip.price }}</p>
+</section>
+
+<!-- Booking Section -->
+<section class="content-section booking-section">
+  <h2>Book Your Trip</h2>
+  <form method="post" class="booking-form" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.full_name.label_tag }}
+      {{ form.full_name }}
+      {{ form.full_name.errors }}
+    </div>
+    <div>
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div>
+      {{ form.phone.label_tag }}
+      {{ form.phone }}
+      {{ form.phone.errors }}
+    </div>
+    <div>
+      {{ form.number_of_persons.label_tag }}
+      {{ form.number_of_persons }}
+      {{ form.number_of_persons.errors }}
+    </div>
+    <div>
+      {{ form.departure_date.label_tag }}
+      {{ form.departure_date }}
+      {{ form.departure_date.errors }}
+    </div>
+    <div class="button-container">
+      <button type="submit">Confirm Booking</button>
+    </div>
+  </form>
+  
+</section>
+{% endblock %}
